@@ -13,11 +13,9 @@ class SpotifyServiceBuilder:
     def __init__(self):
         self._instance = None
 
-    def __call__(self, **kwargs):
+    def __call__(self, spotify_client_key, spotify_client_secret, **_ignored):
         if not self._instance:
-            client_key = kwargs.get('SPOTIFY_CLIENT_KEY')
-            client_secret = kwargs.get('SPOTIFY_CLIENT_SECRET')
-            access_code = self.authorize(client_key, client_secret)
+            access_code = self.authorize(spotify_client_key, spotify_client_secret)
             self._instance = SpotifyService(access_code)
         return self._instance
 
@@ -41,11 +39,9 @@ class PandoraServiceBuilder:
     def __init__(self):
         self._instance = None
 
-    def __call__(self, **kwargs):
+    def __call__(self, pandora_client_key, pandora_client_secret, **_ignored):
         if not self._instance:
-            client_key = kwargs.get('PANDORA_CLIENT_KEY')
-            client_secret = kwargs.get('PANDORA_CLIENT_SECRET')
-            consumer_key, consumer_secret = self.authorize(client_key, client_secret)
+            consumer_key, consumer_secret = self.authorize(pandora_client_key, pandora_client_secret)
             self._instance = PandoraService(consumer_key, consumer_secret)
         return self._instance
 
@@ -61,9 +57,8 @@ class LocalService:
         print('Accessing Local music at {l}'.format(l=self._location))
 
 
-def create_local_music_service(**kwargs):
-    location = kwargs.get('LOCAL_MUSIC_LOCATION')
-    return LocalService(location)
+def create_local_music_service(local_music_location, **_ignored):
+    return LocalService(local_music_location)
 
 
 class MusicServiceProvider(object_factory.ObjectFactory):
